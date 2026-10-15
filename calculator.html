@@ -1,163 +1,207 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-   <meta name="google-adsense-account" content="ca-pub-4957378617452523"> 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4957378617452523"
-     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة أذون الخزانة - جروب عملاء البنوك المصرية</title>
+    <title>حاسبة أذون الخزانة - عملاء البنوك المصرية</title>
     
+    <!-- كود حماية الصفحة من الدخول المباشر قبل تسجيل الدخول -->
     <script>
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('keydown', e => {
-            if (e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 's' || e.key === 'a')) e.preventDefault();
-            if (e.key === 'F12') e.preventDefault();
-        });
-
-        // دالة تنظيف المدخلات لضمان عملها على كل الهواتف
-        function normalizeInput(value) {
-            if (!value) return 0;
-            const arabicToEnglish = {
-                '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4',
-                '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'
-            };
-            let str = value.toString().replace(/[٠-٩]/g, d => arabicToEnglish[d]);
-            return parseFloat(str.replace(/[^0-9.]/g, '')) || 0;
+        if (localStorage.getItem("is_logged_in") !== "true") {
+            window.location.href = "index.html";
         }
     </script>
 
     <style>
-        body { background: #0f172a; color: white; font-family: sans-serif; margin: 0; padding: 15px; user-select: none; }
-        .container { max-width: 450px; margin: auto; background: #1e293b; padding: 20px; border-radius: 20px; border: 2px solid #ffd700; box-sizing: border-box; }
-        .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .lang-btn { background: #ffd700; color: #000; border: none; padding: 6px 10px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; }
-        img { width: 50px; }
-        .sub-title { text-align: center; color: #fff; font-size: 14px; margin-bottom: 5px; }
-        .title { text-align: center; color: #ffd700; margin-bottom: 15px; font-weight: bold; font-size: 18px; }
-        .market-btns { display: flex; gap: 10px; margin-bottom: 15px; }
-        .market-btn { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ffd700; background: #0f172a; color: white; font-size: 13px; cursor: pointer; }
-        .market-btn.active { background: #ffd700; color: #000; font-weight: bold; }
-        input, select { width: 100%; padding: 10px; margin: 6px 0; border-radius: 8px; background: #0f172a; color: white; border: 1px solid #ffd700; text-align: right; box-sizing: border-box; cursor: pointer; }
-        .calc-btn { width: 100%; padding: 12px; margin: 10px 0; background: #ffd700; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .results { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; }
-        .card { background: #0f172a; padding: 10px; border-radius: 6px; border: 1px solid #ffd700; text-align: center; }
-        .card span { display: block; font-size: 10px; margin-bottom: 5px; color: #cbd5e1; }
-        .card h4 { margin: 0; color: #ffd700; font-size: 14px; }
-        .total-box { border: 2px solid #ff4d4d; padding: 12px; border-radius: 8px; text-align: center; margin-top: 15px; }
-        .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #ffd700; border-top: 1px solid #ffd700; padding-top: 10px; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #0d1117;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: #161b22;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid #30363d;
+            text-align: center;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid #d4af37;
+            object-fit: cover;
+        }
+        h2 {
+            font-size: 18px;
+            color: #f0f6fc;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: right;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            color: #8b949e;
+            margin-bottom: 6px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus {
+            border-color: #d4af37;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #d4af37, #aa7c11);
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .results {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #30363d;
+            text-align: right;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .result-item span.val {
+            color: #d4af37;
+            font-weight: bold;
+        }
+        .logout-btn {
+            background: transparent;
+            border: 1px solid #f85149;
+            color: #f85149;
+            font-size: 12px;
+            padding: 6px 12px;
+            margin-top: 15px;
+            width: auto;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="top-row">
-        <button class="lang-btn" id="langBtn" onclick="toggleLang()">English</button>
-        <img src="logo.png" alt="Logo">
-    </div>
-    
-    <div class="sub-title" id="subTitle">حاسبة اذون الخزانة</div>
-    <div class="title" id="groupTitle">جروب عملاء البنوك المصرية</div>
-    
-    <div class="market-btns">
-        <button class="market-btn active" id="btn1" onclick="setMarket('primary')">السوق الأولي</button>
-        <button class="market-btn" id="btn2" onclick="setMarket('secondary')">السوق الثانوي</button>
-    </div>
-    <input type="text" id="nominal" placeholder="القيمة الاسمية" oninput="format(this)">
-    <input type="text" id="rate" placeholder="سعر العائد (%)">
-    <select id="days"></select>
-    
-    <button class="calc-btn" id="calcBtn" onclick="calc()">احسب الآن</button>
-    
-    <div class="results">
-        <div class="card"><span id="lblPrice">سعر الشراء</span><h4 id="resPrice">0</h4></div>
-        <div class="card"><span id="lblReturn">مبلغ راجع يوم الاصدار</span><h4 id="resReturn">0</h4></div>
-        <div class="card"><span id="lblTax">الضريبة (20%)</span><h4 id="resTax">0</h4></div>
-        <div class="card"><span id="lblNet">الربح الصافي</span><h4 id="resNet">0</h4></div>
-    </div>
-    <div class="total-box">
-        <span id="lblTotal" style="font-size:13px">المبلغ المسترد نهاية المدة:</span><h4 id="resTotal" style="margin:5px 0 0 0">0</h4>
-        <span id="lblAnnualYield" style="font-size:12px; margin-top:10px; color:#ffd700">نسبة العائد السنوي: <b id="resAnnualYield">0</b>%</span>
-    </div>
-    <div class="footer">
-        🛡️ جروب عملاء البنوك المصرية<br>Developed by Tarek Metwally
-    </div>
-</div>
 
-<script>
-    let isAr = true;
-    let currentType = 'primary';
+    <div class="container">
+        <div class="header">
+            <img src="logo.png" alt="Logo" class="logo" onerror="this.style.display='none'">
+            <h2>حاسبة أذون الخزانة</h2>
+        </div>
 
-    function toggleLang() {
-        isAr = !isAr;
-        document.documentElement.dir = isAr ? "rtl" : "ltr";
-        document.getElementById('langBtn').innerText = isAr ? "English" : "العربية";
-        document.getElementById('subTitle').innerText = isAr ? "حاسبة اذون الخزانة" : "T-Bills Calculator";
-        document.getElementById('groupTitle').innerText = isAr ? "جروب عملاء البنوك المصرية" : "Egyptian Bank Clients Group";
-        document.getElementById('btn1').innerText = isAr ? "السوق الأولي" : "Primary Market";
-        document.getElementById('btn2').innerText = isAr ? "السوق الثانوي" : "Secondary Market";
-        document.getElementById('calcBtn').innerText = isAr ? "احسب الآن" : "Calculate Now";
-        document.getElementById('lblPrice').innerText = isAr ? "سعر الشراء" : "Purchase Price";
-        document.getElementById('lblReturn').innerText = isAr ? "مبلغ راجع يوم الاصدار" : "Return at Issuance";
-        document.getElementById('lblTax').innerText = isAr ? "الضريبة (20%)" : "Tax (20%)";
-        document.getElementById('lblNet').innerText = isAr ? "الربح الصافي" : "Net Profit";
-        document.getElementById('lblTotal').innerText = isAr ? "المبلغ المسترد نهاية المدة:" : "Amount at Maturity:";
-        document.getElementById('lblAnnualYield').innerHTML = isAr ? "نسبة العائد السنوي: <b id='resAnnualYield'>0</b>%" : "Net Annual Yield: <b id='resAnnualYield'>0</b>%";
-        setMarket(currentType); 
-    }
+        <div class="input-group">
+            <label>القيمة الاسمية (جنيه):</label>
+            <input type="number" id="faceValue" placeholder="مثال: 100000" value="100000">
+        </div>
 
-    function format(input) {
-        let cleanVal = normalizeInput(input.value);
-        if (cleanVal > 0) input.value = Math.floor(cleanVal).toLocaleString();
-    }
+        <div class="input-group">
+            <label>معدل الفائدة السنوي (%):</label>
+            <input type="number" step="0.01" id="interestRate" placeholder="مثال: 25" value="25">
+        </div>
 
-    function setMarket(type) {
-        currentType = type;
-        document.getElementById('btn1').className = type === 'primary' ? 'market-btn active' : 'market-btn';
-        document.getElementById('btn2').className = type === 'secondary' ? 'market-btn active' : 'market-btn';
-        
-        let select = document.getElementById('days');
-        select.innerHTML = "";
-        let unit = isAr ? " يوم" : " Days";
-        
-        if (type === 'primary') {
-            [91, 182, 273, 364].forEach(d => {
-                let opt = document.createElement("option");
-                opt.value = d;
-                opt.text = d + unit;
-                select.add(opt);
-            });
-        } else {
-            for (let i = 1; i <= 364; i++) {
-                let opt = document.createElement("option");
-                opt.value = i;
-                opt.text = i + unit;
-                select.add(opt);
+        <div class="input-group">
+            <label>المدة (أيام):</label>
+            <select id="tenure">
+                <option value="91">91 يوم</option>
+                <option value="182">182 يوم</option>
+                <option value="273">273 يوم</option>
+                <option value="364">364 يوم</option>
+            </select>
+        </div>
+
+        <button onclick="calculate()">احسب الآن</button>
+
+        <div class="results" id="results" style="display: none;">
+            <div class="result-item">
+                <span>المبلغ المدفوع للشراء:</span>
+                <span class="val" id="purchasePrice">0 جنيه</span>
+            </div>
+            <div class="result-item">
+                <span>الفائدة المقدمة:</span>
+                <span class="val" id="grossInterest">0 جنيه</span>
+            </div>
+            <div class="result-item">
+                <span>الضريبة الخصم المخصومة (20%):</span>
+                <span class="val" id="tax">0 جنيه</span>
+            </div>
+            <div class="result-item">
+                <span>صافي العائد الفعلي:</span>
+                <span class="val" id="netInterest">0 جنيه</span>
+            </div>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">تسجيل الخروج من الجهاز</button>
+    </div>
+
+    <script>
+        function calculate() {
+            let faceValue = parseFloat(document.getElementById('faceValue').value) || 0;
+            let rate = parseFloat(document.getElementById('interestRate').value) || 0;
+            let days = parseInt(document.getElementById('tenure').value) || 91;
+
+            if (faceValue <= 0 || rate <= 0) {
+                alert('يرجى إدخال قيم صحيحة');
+                return;
             }
+
+            // معادلات أذون الخزانة وفقاً للقوانين المصرية (ضريبة 20% على العائد)
+            let interestFraction = (rate / 100) * (days / 365);
+            let purchasePrice = faceValue / (1 + interestFraction);
+            let grossInterest = faceValue - purchasePrice;
+            let tax = grossInterest * 0.20;
+            let netInterest = grossInterest - tax;
+
+            document.getElementById('purchasePrice').innerText = purchasePrice.toFixed(2) + " جنيه";
+            document.getElementById('grossInterest').innerText = grossInterest.toFixed(2) + " جنيه";
+            document.getElementById('tax').innerText = tax.toFixed(2) + " جنيه";
+            document.getElementById('netInterest').innerText = netInterest.toFixed(2) + " جنيه";
+
+            document.getElementById('results').style.display = 'block';
         }
-    }
 
-    function calc() {
-        let P = normalizeInput(document.getElementById('nominal').value);
-        let R = normalizeInput(document.getElementById('rate').value) / 100;
-        let D = parseInt(document.getElementById('days').value) || 0;
-        
-        let price = P / (1 + (R * D / 365));
-        let profit = P - price;
-        let tax = profit * 0.20;
-        let netProfit = profit - tax;
-        let finalAmount = price + netProfit; 
-        
-        let annualYield = (netProfit / price) * (365 / D) * 100;
+        function logout() {
+            localStorage.removeItem("is_logged_in");
+            window.location.href = "index.html";
+        }
+    </script>
 
-        document.getElementById('resPrice').innerText = Math.round(price).toLocaleString();
-        document.getElementById('resReturn').innerText = Math.round(profit).toLocaleString();
-        document.getElementById('resTax').innerText = Math.round(tax).toLocaleString();
-        document.getElementById('resNet').innerText = Math.round(netProfit).toLocaleString();
-        document.getElementById('resTotal').innerText = Math.round(finalAmount).toLocaleString();
-        document.getElementById('resAnnualYield').innerText = annualYield.toFixed(2);
-    }
-
-    window.onload = () => setMarket('primary');
-</script>
 </body>
 </html>
